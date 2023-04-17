@@ -4,7 +4,7 @@
   <title>Upload XML File</title>
 </head>
 <body>
-  <form action="upload.php" method="post" enctype="multipart/form-data">
+  <form action="uploadipd.php" method="post" enctype="multipart/form-data">
     <input type="file" name="xmlfile" accept=".xml">
     <input type="submit" value="Upload">
   </form>
@@ -56,11 +56,11 @@
         $gtotal = $thismonip->gtotal;
         $rid = $thismonip->rid;
 
-        $date_str = $tbill->dttran;
+        $date_str = $thismonip->datedsc;
         $datetime = date("Y-m-d H:i:s", strtotime($date_str));
 
 
-        $sql = "INSERT INTO stm (id, invno, hn, dttran, amount, rid) VALUES ('$id', $id, '$hn', '$datetime', '$amount', '$rid')";
+        $sql = "INSERT INTO stm_ipd (id, an, dchdate, amlim, amreimb, adjrw, tamreim, ramreim, pamreim, gamlim, gamreim, total, rtotal, gtotal, rid) VALUES ('$id', $an, '$date_str', '$amlim', '$amreimb', '$adjrw', '$tamreim', '$ramreim', '$pamreim', '$gamlim', '$gamreim', '$total', '$rtotal', '$gtotal', '$rid')";
       
          // รัน SQL query
         if ($conn->query($sql) === TRUE) {
@@ -71,10 +71,10 @@
           } else {
               // เพิ่มจำนวนรายการที่มีอยู่แล้วในฐานข้อมูล
               $duplicate_count++;
-              echo "INVNO " . $id . " มีอยู่แล้วในฐานข้อมูล". "<br>" ;
+              echo "AN " . $id . " มีอยู่แล้วในฐานข้อมูล". "<br>" ;
           }
         } else {
-            echo "มีอยู่แล้วในฐานข้อมูล: " . $id . "<br>";
+          echo "Error: " . $sql . "<br>" . $conn->error;
         }
       }
       // แสดงจำนวนรายการที่นำเข้าเรียบร้อยและจำนวนรายการที่มีอยู่แล้วในฐานข้อมูล
