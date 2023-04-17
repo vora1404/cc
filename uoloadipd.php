@@ -32,15 +32,29 @@
       $imported_count = 0;
       $duplicate_count = 0;
       
-      foreach($xml->TBills->TBill as $tbill) {
+      foreach($xml->thismonip as $thismonip) {
 
         
       
-        $id = $tbill->invno;
-        $hn = $tbill->hn;
-        $dttran = $tbill->dttran;
-        $amount = $tbill->amount;
-        $rid = $tbill->rid;
+        $id = $thismonip->an;
+        $an = $thismonip->an;
+        $dchdate = $thismonip->datedsc;
+
+        $amlim = $thismonip->amlim;
+        $amreimb = $thismonip->amreimb;
+        $adjrw = $thismonip->adjrw;
+        $tamreim = $thismonip->tamreim;
+
+        $ramreim = $thismonip->ramreim;
+        $pamreim = $thismonip->pamreim;
+        $gamlim = $thismonip->gamlim;
+        $gamreim = $thismonip->gamreim;
+
+
+        $total = $thismonip->total;
+        $rtotal = $thismonip->rtotal;
+        $gtotal = $thismonip->gtotal;
+        $rid = $thismonip->rid;
 
         $date_str = $tbill->dttran;
         $datetime = date("Y-m-d H:i:s", strtotime($date_str));
