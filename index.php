@@ -43,7 +43,7 @@ sum(s.amount) as ยอดเคลมที่ได้รับSTM
 
  FROM opd_oo o
 left JOIN stm s on o.debt_id = s.invno
-WHERE o.vstdate BETWEEN '2022-10-01' and '2022-10-31'
+WHERE o.vstdate BETWEEN '2022-10-01' and '2023-03-31'
 GROUP BY nm";
 $result = $conn->query($sql);
 
@@ -138,12 +138,12 @@ $result = $conn->query($sql);
                     <tr>
                         <th>#</th>
                         <th>เดือน</th>
-                        <th>ใบแจ้งหนี้ทั้งหมด</th>
-                        <th>ใบแจ้งหนี้ที่มียอด</th>
+                        <th>จำนวนใบแจ้งหนี้ทั้งหมด</th>
+                        <th>ใบแจ้งหนี้ที่มียอดทั้งหมด</th>
+                        <th>ลูกหนี้ทั้งหมด</th>   
                         <th>ใบแจ้งหนี้ที่ได้รับSTM</th>
-                        <th>ไม่ใบแจ้งหนี้ที่ได้รับSTM</th>
-                        <th>ลูกหนี้ทั้งหมด</th>
                         <th>ยอดเคลมที่ได้รับSTM</th>
+                        <th>ไม่ใบแจ้งหนี้ที่ได้รับSTM</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -156,10 +156,10 @@ $result = $conn->query($sql);
                     <td ><?php echo $row["mm"]; ?> </td>
                     <td ><?php echo $row["ใบแจ้งหนี้ทั้งหมด"]; ?> </td>
                     <td ><?php echo $row["ใบแจ้งหนี้ที่มียอด"]; ?> </td>
-                    <td ><?php echo $row["ใบแจ้งหนี้ที่ได้รับSTM"]; ?> </td>
-                    <td ><?php echo $row["ไม่ใบแจ้งหนี้ที่ได้รับSTM"]; ?> </td>
                     <td ><?php echo $row["ลูกหนี้ทั้งหมด"]; ?> </td>
-                    <td ><?php echo $row["ยอดเคลมที่ได้รับSTM"]; ?> </td>        
+                    <td ><?php echo $row["ใบแจ้งหนี้ที่ได้รับSTM"]; ?> </td>        
+                    <td ><?php echo $row["ยอดเคลมที่ได้รับSTM"]; ?> </td>  
+                    <td ><?php echo $row["ไม่ใบแจ้งหนี้ที่ได้รับSTM"]; ?> </td>      
                 </tr>
                 <?php
                 }
