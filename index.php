@@ -1,9 +1,9 @@
 <?php
 
 // การเชื่อมต่อฐานข้อมูล MySQL
-$servername = "localhost";
-$username = "root";
-$password = "";
+$servername = "172.16.0.213";
+$username = "webcom";
+$password = "p@ss10697";
 $dbname = "claim";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -116,13 +116,13 @@ $result = $conn->query($sql);
                         <a class="nav-link" href="#">หน้าแรก</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">เกี่ยวกับเรา</a>
+                        <a class="nav-link" href="index.php">OPD_กรมบัญชีกลาง</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">บริการ</a>
+                        <a class="nav-link" href="ipd_coc.php">IPD_กรมบัญชีกลาง</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">ติดต่อเรา</a>
+                        <a class="nav-link" href="#"></a>
                     </li>
                 </ul>
             </div>
