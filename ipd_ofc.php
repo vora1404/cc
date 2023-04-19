@@ -13,37 +13,36 @@ if ($conn->connect_error) {
 
 // คำสั่ง SQL เพื่อดึงข้อมูลจากตาราง stm
 $sql = "SELECT 
-
-
 case 
-when MONTHNAME(o.vstdate) = 'October' then 1
-when MONTHNAME(o.vstdate) = 'November' then 2
-when MONTHNAME(o.vstdate) = 'December' then 3
-when MONTHNAME(o.vstdate) = 'January' then 4
-when MONTHNAME(o.vstdate) = 'February' then 5
-when MONTHNAME(o.vstdate) = 'March' then 6
+when MONTHNAME(i.dchdate) = 'October' then 1
+when MONTHNAME(i.dchdate) = 'November' then 2
+when MONTHNAME(i.dchdate) = 'December' then 3
+when MONTHNAME(i.dchdate) = 'January' then 4
+when MONTHNAME(i.dchdate) = 'February' then 5
+when MONTHNAME(i.dchdate) = 'March' then 6
 end as nm,
 
 case 
 
-when o.vstdate BETWEEN '2022-10-01' and '2022-10-31' then concat((year(o.vstdate)+543),' ','ตุลาคม')
-when o.vstdate BETWEEN '2022-11-01' and '2022-11-30' then concat((year(o.vstdate)+543),' ','พฤศจิกายน')
-when o.vstdate BETWEEN '2022-12-01' and '2022-12-31' then concat((year(o.vstdate)+543),' ','ธันวาคม')
+when i.dchdate BETWEEN '2022-10-01' and '2022-10-31' then concat((year(i.dchdate)+543),' ','ตุลาคม')
+when i.dchdate BETWEEN '2022-11-01' and '2022-11-30' then concat((year(i.dchdate)+543),' ','พฤศจิกายน')
+when i.dchdate BETWEEN '2022-12-01' and '2022-12-31' then concat((year(i.dchdate)+543),' ','ธันวาคม')
 
-when o.vstdate BETWEEN '2023-01-01' and '2023-01-31' then concat((year(o.vstdate)+543),' ','มกราคม')
-when o.vstdate BETWEEN '2023-02-01' and '2023-02-28' then concat((year(o.vstdate)+543),' ','กุมภาพันธ์')
-when o.vstdate BETWEEN '2023-03-01' and '2023-03-31' then concat((year(o.vstdate)+543),' ','มีนาคม')
+when i.dchdate BETWEEN '2023-01-01' and '2023-01-31' then concat((year(i.dchdate)+543),' ','มกราคม')
+when i.dchdate BETWEEN '2023-02-01' and '2023-02-28' then concat((year(i.dchdate)+543),' ','กุมภาพันธ์')
+when i.dchdate BETWEEN '2023-03-01' and '2023-03-31' then concat((year(i.dchdate)+543),' ','มีนาคม')
 end as mm,
-count(o.debt_id) as ใบแจ้งหนี้ทั้งหมด,
-count(case when o.amount_debt > 0 then o.debt_id end) as ใบแจ้งหนี้ที่มียอด,
-count(case when s.amount is not null and o.amount_debt > 0 then 1 end) as ใบแจ้งหนี้ที่ได้รับSTM,
-count(case when s.amount is null and o.amount_debt > 0 then 1 end) as ไม่ใบแจ้งหนี้ที่ได้รับSTM,
-sum(o.amount_debt) as ลูกหนี้ทั้งหมด,
-sum(s.amount) as ยอดเคลมที่ได้รับSTM,
-sum(case when s.amount is null and o.amount_debt > 0 then o.amount_debt end) as ยังไม่ได้STM
- FROM opd_oo o
-left JOIN stm s on o.debt_id = s.invno
-WHERE o.vstdate BETWEEN '2022-10-01' and '2023-03-31'
+count(i.an) as ใบแจ้งหนี้ทั้งหมด,
+count(case when i.debt_price > 0 then i.an end) as ใบแจ้งหนี้ที่มียอด,
+count(case when s.total is not null and i.debt_price > 0 then 1 end) as ใบแจ้งหนี้ที่ได้รับSTM,
+count(case when s.total is null and i.debt_price > 0 then 1 end) as ไม่ใบแจ้งหนี้ที่ได้รับSTM,
+sum(i.debt_price) as ลูกหนี้ทั้งหมด,
+sum(s.total) as ยอดเคลมที่ได้รับSTM,
+sum(case when s.total is null and i.debt_price > 0 then i.debt_price end) as ยังไม่ได้STM
+
+FROM ipd_ofc i
+LEFT JOIN stm_ipd s on i.an = s.an
+WHERE i.dchdate BETWEEN '2022-10-01' and '2023-03-31'
 GROUP BY nm";
 $result = $conn->query($sql);
 
@@ -97,7 +96,7 @@ $result = $conn->query($sql);
     function formatCurrency($amount) {
      return number_format($amount, 2, '.', ',');
     }
-  ?>
+?>
 
 <body>
 <div class="container">
@@ -113,10 +112,10 @@ $result = $conn->query($sql);
                         <a class="nav-link" href="#">หน้าแรก</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.php">OPD กรมบัญชีกลาง</a>
+                        <a class="nav-link" href="index.php">OPD กรมบัญชีกลาง</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="ipd_ofc.php">IPD กรมบัญชีกลาง</a>
+                        <a class="nav-link active" href="ipd_ofc.php">IPD กรมบัญชีกลาง</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"></a>
@@ -128,7 +127,7 @@ $result = $conn->query($sql);
     <br/> 
 	<!-- สร้างตาราง HTML สำหรับ DataTable -->
     <div class="container">
-        <a href="upload.php" class="btn btn-info" role="button">นำเข้า STM</a>
+        <a href="uploadipd.php" class="btn btn-info" role="button">นำเข้า STM</a>
         <br>
             <table id="myTable" class="table table-striped table-bordered" style="width:100%">
                 <thead>
@@ -140,12 +139,12 @@ $result = $conn->query($sql);
                             <th colspan="2" bgcolor="red" style="vertical-align : middle;text-align:center;">ไม่ได้รับ STM</th>
                         </tr>
                             
-                            <th>จำนวนใบแจ้งหนี้ทั้งหมด</th>
-                            <th>ใบแจ้งหนี้ที่มียอดทั้งหมด</th>
+                            <th>an</th>
+                            <th>anที่มียอดทั้งหมด</th>
                             <th>ลูกหนี้ทั้งหมด</th>   
-                            <th>จำนวนใบแจ้งหนี้</th>
+                            <th>an</th>
                             <th>ยอด</th>
-                            <th>จำนวนใบแจ้งหนี้</th>
+                            <th>an</th>
                             <th>ยอด</th>
                     </tr>
                 </thead>
@@ -159,11 +158,11 @@ $result = $conn->query($sql);
                     <td ><?php echo $row["mm"]; ?> </td>
                     <td ><?php echo $row["ใบแจ้งหนี้ทั้งหมด"]; ?> </td>
                     <td ><?php echo $row["ใบแจ้งหนี้ที่มียอด"]; ?> </td>
-                    <td ><?php echo formatCurrency($row["ลูกหนี้ทั้งหมด"]) ?> </td>
+                    <td ><?php echo formatCurrency($row["ลูกหนี้ทั้งหมด"]); ?> </td>
                     <td ><?php echo $row["ใบแจ้งหนี้ที่ได้รับSTM"]; ?> </td>        
-                    <td ><?php echo formatCurrency($row["ยอดเคลมที่ได้รับSTM"]) ?> </td>  
+                    <td ><?php echo formatCurrency($row["ยอดเคลมที่ได้รับSTM"]); ?> </td>  
                     <td ><?php echo $row["ไม่ใบแจ้งหนี้ที่ได้รับSTM"]; ?> </td>    
-                    <td ><?php echo formatCurrency($row["ยังไม่ได้STM"]) ?> </td>        
+                    <td ><?php echo formatCurrency($row["ยังไม่ได้STM"]); ?> </td>        
                 </tr>
                 <?php
                 }

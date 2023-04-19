@@ -10,9 +10,9 @@
   </form>
 
   <?php
-  $servername = "localhost";
-  $username = "root";
-  $password = "";
+  $servername = "172.16.0.213";
+  $username = "webcom";
+  $password = "p@ss10697";
   $dbname = "claim";
   
   // สร้างการเชื่อมต่อฐานข้อมูล
